@@ -43,3 +43,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android local properties & signing
+/android/local.properties
+/android/*.jks
+/android/*.keystore
+/android/key.properties
+
+# iOS CocoaPods & DerivedData
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+
