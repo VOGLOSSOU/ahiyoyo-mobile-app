@@ -32,18 +32,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final List<OnboardingItem> _items = const [
     OnboardingItem(
       imagePath: 'ressources/au-port.png',
-      title: 'Achetez, vendez et expédiez à l’international depuis l’Afrique.',
-      description: 'Expédiez à l’international par voie maritime, aérienne et terrestre en toute simplicité.',
+      title: 'Tout le commerce international depuis votre téléphone.',
+      description: 'Expédiez, suivez et recevez vos colis depuis l’Afrique vers le monde entier, en quelques tapes.',
     ),
     OnboardingItem(
       imagePath: 'ressources/groupage.png',
-      title: 'Achetez, vendez et expédiez à l’international depuis l’Afrique.',
-      description: 'Profitez d’offres exclusives de groupage maritime et aérien pour optimiser le coût de vos expéditions de colis.',
+      title: 'Des tarifs qui baissent avec la taille du conteneur.',
+      description: 'Profitez de nos groupages collectifs (maritime et aérien) pour payer moins par CBM ou KG partagé.',
     ),
     OnboardingItem(
       imagePath: 'ressources/sourcing.png',
-      title: 'Achetez, vendez et expédiez à l’international depuis l’Afrique.',
-      description: 'Ahiyoyo vous aide à trouver des fournisseurs, à passer vos commandes et à contrôler la qualité de vos articles directement en Chine.',
+      title: 'De la source Chine au suivi réel de votre colis.',
+      description: 'Trouvez des fournisseurs, faites vos achats et suivez chaque étape jusqu’au retrait en entrepôt.',
     ),
   ];
 

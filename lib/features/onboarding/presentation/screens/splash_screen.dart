@@ -1,26 +1,29 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../app/providers/app_providers.dart';
 import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
   late final Animation<double> _opacityAnimation;
 
+  bool _navigated = false;
+
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
@@ -34,38 +37,41 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    _checkAndNavigate();
+    // Phase de préalading : vérifie l'état d'onboarding (extensible ici
+    // avec d'autres checks comme une mise à jour forcée).
+    // addPostFrameCallback garantit que le GoRouter est attaché au context
+    // avant d'appeler context.go (évite les erreurs dans initState).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initialize();
+    });
   }
 
-  Future<void> _checkAndNavigate() async {
-    // Petit délai minimum pour apprécier l'animation du logo (ex: 1.5 secondes)
-    await Future.wait([
-      Future.delayed(const Duration(milliseconds: 1500)),
-      _checkOnboardingStatus(),
-    ]);
+  Future<void> _initialize() async {
+    final hasCompleted = await _hasCompletedOnboarding();
+    _navigate(hasCompleted);
   }
 
-  Future<void> _checkOnboardingStatus() async {
+  Future<bool> _hasCompletedOnboarding() async {
+    final cache = ref.read(localCacheProvider);
+    // LocalCacheService.get() renvoie déjà la valeur déballée de `data`
+    // (ex. `true` pour save('...', true)).
+    final result = await cache.get('has_completed_onboarding');
+    final hasCompleted = result == true;
+
+    // Durée minimale d'affichage pour apprécier l'animation du logo.
+    await Future<void>.delayed(const Duration(milliseconds: 1500));
+    return hasCompleted;
+  }
+
+  void _navigate(bool hasCompleted) {
+    if (!mounted || _navigated) return;
+    _navigated = true;
+    // Stoppe le repeat pour éviter les fuites de timers entre tests.
+    _controller.stop();
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString('ahiyoyo_cache_has_completed_onboarding');
-      bool completed = false;
-      if (raw != null) {
-        final decoded = jsonDecode(raw);
-        completed = decoded['data'] == true;
-      }
-
-      if (mounted) {
-        if (completed) {
-          context.go(AppRoutes.home);
-        } else {
-          context.go(AppRoutes.onboarding);
-        }
-      }
-    } catch (_) {
-      if (mounted) {
-        context.go(AppRoutes.onboarding);
-      }
+      context.go(hasCompleted ? AppRoutes.home : AppRoutes.onboarding);
+    } catch (e) {
+      debugPrint('[SplashScreen] navigation failed: $e');
     }
   }
 

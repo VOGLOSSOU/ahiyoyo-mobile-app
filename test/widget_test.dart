@@ -1,49 +1,103 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:ahiyoyo/app/providers/app_providers.dart';
+import 'package:ahiyoyo/app/router/app_router.dart';
+import 'package:ahiyoyo/core/storage/local_cache.dart';
 import 'package:ahiyoyo/main.dart';
 
+/// Implémentation en mémoire du cache, injectée via Riverpod overrides.
+class _MemoryCache extends LocalCacheService {
+  final Map<String, dynamic> _store = {};
+
+  @override
+  Future<dynamic> get(String key, {Duration? maxAge}) async {
+    final entry = _store[key];
+    if (entry == null) return null;
+    if (entry is Map && entry.containsKey('timestamp') && maxAge != null) {
+      final ts = entry['timestamp'] as int?;
+      if (ts != null) {
+        final age = DateTime.now().difference(
+          DateTime.fromMillisecondsSinceEpoch(ts),
+        );
+        if (age > maxAge) return null;
+      }
+    }
+    return entry is Map ? entry['data'] : entry;
+  }
+
+  @override
+  Future<dynamic> getStale(String key) async {
+    final entry = _store[key];
+    return entry is Map ? entry['data'] : entry;
+  }
+
+  @override
+  Future<void> save(String key, dynamic data) async {
+    _store[key] = {'timestamp': DateTime.now().millisecondsSinceEpoch, 'data': data};
+  }
+
+  @override
+  Future<void> remove(String key) async => _store.remove(key);
+
+  @override
+  Future<void> clearAll() async => _store.clear();
+}
+
 void main() {
-  testWidgets('Ahiyoyo smoke test - L\'application démarre et affiche l\'accueil', (WidgetTester tester) async {
-    SharedPreferences.setMockInitialValues({
-      'ahiyoyo_cache_has_completed_onboarding': '{"timestamp":1234567890,"data":true}',
-    });
+  setUp(() {
+    // Reset le router global à l'état initial (splash) avant chaque test.
+    appRouter.go(AppRoutes.splash);
+  });
+
+  testWidgets(
+      "Ahiyoyo onboarding test - Affiche l'onboarding si non complété",
+      (WidgetTester tester) async {
+    final cache = _MemoryCache();
+    await cache.save('has_completed_onboarding', false);
 
     await tester.pumpWidget(
-      const ProviderScope(
-        child: AhiyoyoApp(),
+      ProviderScope(
+        overrides: [
+          localCacheProvider.overrideWithValue(cache),
+        ],
+        child: const AhiyoyoApp(),
       ),
     );
 
-    // Passer le splash screen (1.5s)
-    await tester.pump(const Duration(milliseconds: 1600));
-    await tester.pumpAndSettle();
+    for (int i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    await tester.pump(const Duration(milliseconds: 500));
 
-    // Vérifier la présence de la marque AHIYOYO sur l'accueil
+    expect(find.textContaining('commerce international'), findsOneWidget);
+    expect(find.text('Passer'), findsOneWidget);
+    expect(find.text('Suivant'), findsOneWidget);
+  });
+
+  testWidgets(
+      "Ahiyoyo smoke test - l'application démarre et affiche l'accueil",
+      (WidgetTester tester) async {
+    final cache = _MemoryCache();
+    await cache.save('has_completed_onboarding', true);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          localCacheProvider.overrideWithValue(cache),
+        ],
+        child: const AhiyoyoApp(),
+      ),
+    );
+
+    for (int i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    await tester.pump(const Duration(milliseconds: 500));
+
     expect(find.text('AHIYOYO'), findsOneWidget);
-    // Vérifier la présence des onglets de navigation
     expect(find.text('Accueil'), findsOneWidget);
     expect(find.text('Mes colis'), findsOneWidget);
     expect(find.text('Commandes'), findsOneWidget);
   });
-
-  testWidgets('Ahiyoyo onboarding test - Affiche l\'onboarding si non complété', (WidgetTester tester) async {
-    SharedPreferences.setMockInitialValues({}); // Non complété
-
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: AhiyoyoApp(),
-      ),
-    );
-
-    // Passer le splash screen (1.5s)
-    await tester.pump(const Duration(milliseconds: 1600));
-    await tester.pumpAndSettle();
-
-    // Vérifier le titre et les boutons de l'onboarding
-    expect(find.textContaining('Achetez, vendez et expédiez'), findsOneWidget);
-    expect(find.text('Passer'), findsOneWidget);
-    expect(find.text('Suivant'), findsOneWidget);
-  });
 }
-
