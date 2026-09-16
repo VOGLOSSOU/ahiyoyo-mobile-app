@@ -79,19 +79,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         width: 32,
                         height: 32,
                         decoration: BoxDecoration(
-                          color: AppColors.primaryMuted,
-                          borderRadius: BorderRadius.circular(8),
+                          shape: BoxShape.circle,
                           border: Border.all(color: AppColors.primary, width: 1),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'AH',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Image.asset(
+                          'ressources/ahiyoyo-logo.jpg',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                'AH',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(width: 8),

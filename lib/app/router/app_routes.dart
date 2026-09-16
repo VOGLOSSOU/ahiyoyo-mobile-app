@@ -1,7 +1,10 @@
 /// Constantes de routes pour GoRouter.
 abstract class AppRoutes {
+  // --- Routes spéciales ---
+  static const String splash = '/';
+
   // --- Onglets du ShellRoute (Bottom Navigation) ---
-  static const String home = '/';
+  static const String home = '/home';
   static const String parcels = '/parcels';
   static const String orders = '/orders';
   static const String notifications = '/notifications';
