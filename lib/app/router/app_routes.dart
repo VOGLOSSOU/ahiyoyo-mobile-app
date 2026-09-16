@@ -19,6 +19,7 @@ abstract class AppRoutes {
   static const String airOfferDetail = '/air-offers/:id';
   static const String tariffs = '/tariffs';
   static const String freightCalculator = '/freight-calculator';
+  static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
