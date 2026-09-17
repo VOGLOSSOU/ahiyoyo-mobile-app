@@ -68,201 +68,189 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Top Bar with Skip button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: _items.length,
+            onPageChanged: (index) => setState(() => _currentIndex = index),
+            itemBuilder: (context, index) {
+              final item = _items[index];
+              return Stack(
+                fit: StackFit.expand,
                 children: [
-                  Container(
-                    width: 80,
-                    height: 32,
+                  Image.asset(
+                    item.imagePath,
+                    fit: BoxFit.cover,
+                    excludeFromSemantics: true,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const ColoredBox(color: AppColors.surface),
+                  ),
+                  const DecoratedBox(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Image.asset(
-                      'ressources/ahiyoyo-logo.jpg',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: AppColors.primary,
-                          child: const Center(
-                            child: Text(
-                              'Ahiyoyo',
-                              style: TextStyle(
-                                color: AppColors.onPrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0x66000000),
+                          Color(0x10000000),
+                          Color(0x99000000),
+                          Color(0xF2000000),
+                        ],
+                        stops: [0, 0.32, 0.62, 1],
+                      ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: _finishOnboarding,
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.textSecondary,
-                    ),
-                    child: const Text(
-                      'Passer',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                  SafeArea(
+                    minimum: const EdgeInsets.only(top: 16, bottom: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 80, 24, 136),
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: SingleChildScrollView(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 560),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 4,
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                ),
+                                Text(
+                                  item.title,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.sizeOf(context).width < 360
+                                        ? 28
+                                        : 34,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.12,
+                                    letterSpacing: -0.8,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  item.description,
+                                  style: const TextStyle(
+                                    color: Color(0xFFE5E5E5),
+                                    fontSize: 16,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ],
-              ),
-            ),
-
-            // PageView Content
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _items.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  final item = _items[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Image Illustration container
-                        Expanded(
-                          flex: 5,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16),
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: AppColors.border,
-                                width: 1,
-                              ),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: Image.asset(
-                              item.imagePath,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.image_outlined,
-                                        size: 64,
-                                        color: AppColors.textTertiary,
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        'Illustration ${index + 1}',
-                                        style: const TextStyle(
-                                          color: AppColors.textSecondary,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Title & Description
-                        Expanded(
-                          flex: 4,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.title,
-                                style: const TextStyle(
-                                  color: AppColors.textPrimary,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.3,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                item.description,
-                                style: const TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 15,
-                                  height: 1.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Bottom Navigation Indicators & Action Button
-            Padding(
-              padding: const EdgeInsets.all(24.0),
+              );
+            },
+          ),
+          SafeArea(
+            minimum: const EdgeInsets.symmetric(vertical: 16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
-                  // Indicators dots
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _items.length,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: _currentIndex == index ? 24 : 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: _currentIndex == index
-                              ? AppColors.primary
-                              : AppColors.border,
-                          borderRadius: BorderRadius.circular(4),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: Image.asset(
+                          'ressources/ahiyoyo-logo.jpg',
+                          width: 80,
+                          height: 32,
+                          fit: BoxFit.cover,
+                          semanticLabel: 'Ahiyoyo',
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Text(
+                                'Ahiyoyo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                         ),
                       ),
-                    ),
+                      TextButton(
+                        onPressed: _finishOnboarding,
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: const Color(0x40000000),
+                          minimumSize: const Size(80, 44),
+                        ),
+                        child: const Text('Passer'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 24),
-
-                  // Next / Start Button
-                  AhiyoyoButton(
-                    text: _currentIndex == _items.length - 1
-                        ? 'Commencer'
-                        : 'Suivant',
-                    onPressed: () {
-                      if (_currentIndex < _items.length - 1) {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      } else {
-                        _finishOnboarding();
-                      }
-                    },
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 560),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Semantics(
+                            label:
+                                'Page ${_currentIndex + 1} sur ${_items.length}',
+                            child: Row(
+                              children: List.generate(
+                                _items.length,
+                                (index) => AnimatedContainer(
+                                  duration: const Duration(milliseconds: 250),
+                                  margin: const EdgeInsets.only(right: 8),
+                                  width: _currentIndex == index ? 32 : 8,
+                                  height: 6,
+                                  decoration: BoxDecoration(
+                                    color: _currentIndex == index
+                                        ? AppColors.primary
+                                        : const Color(0x66FFFFFF),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          AhiyoyoButton(
+                            text: _currentIndex == _items.length - 1
+                                ? 'Commencer'
+                                : 'Suivant',
+                            onPressed: () {
+                              if (_currentIndex < _items.length - 1) {
+                                _pageController.nextPage(
+                                  duration: const Duration(milliseconds: 350),
+                                  curve: Curves.easeInOut,
+                                );
+                              } else {
+                                _finishOnboarding();
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
