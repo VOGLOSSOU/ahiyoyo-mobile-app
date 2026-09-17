@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/material.dart';
 import 'package:ahiyoyo/app/providers/app_providers.dart';
 import 'package:ahiyoyo/app/router/app_router.dart';
+import 'package:ahiyoyo/app/router/app_routes.dart';
 import 'package:ahiyoyo/core/storage/local_cache.dart';
 import 'package:ahiyoyo/main.dart';
 
@@ -34,7 +34,10 @@ class _MemoryCache extends LocalCacheService {
 
   @override
   Future<void> save(String key, dynamic data) async {
-    _store[key] = {'timestamp': DateTime.now().millisecondsSinceEpoch, 'data': data};
+    _store[key] = {
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'data': data,
+    };
   }
 
   @override
@@ -51,53 +54,51 @@ void main() {
   });
 
   testWidgets(
-      "Ahiyoyo onboarding test - Affiche l'onboarding si non complété",
-      (WidgetTester tester) async {
-    final cache = _MemoryCache();
-    await cache.save('has_completed_onboarding', false);
+    "Ahiyoyo onboarding test - Affiche l'onboarding si non complété",
+    (WidgetTester tester) async {
+      final cache = _MemoryCache();
+      await cache.save('has_completed_onboarding', false);
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          localCacheProvider.overrideWithValue(cache),
-        ],
-        child: const AhiyoyoApp(),
-      ),
-    );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [localCacheProvider.overrideWithValue(cache)],
+          child: const AhiyoyoApp(),
+        ),
+      );
 
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 300));
-    }
-    await tester.pump(const Duration(milliseconds: 500));
+      for (int i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 300));
+      }
+      await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.textContaining('commerce international'), findsOneWidget);
-    expect(find.text('Passer'), findsOneWidget);
-    expect(find.text('Suivant'), findsOneWidget);
-  });
+      expect(find.textContaining('commerce international'), findsOneWidget);
+      expect(find.text('Passer'), findsOneWidget);
+      expect(find.text('Suivant'), findsOneWidget);
+    },
+  );
 
   testWidgets(
-      "Ahiyoyo smoke test - l'application démarre et affiche l'accueil",
-      (WidgetTester tester) async {
-    final cache = _MemoryCache();
-    await cache.save('has_completed_onboarding', true);
+    "Ahiyoyo smoke test - l'application démarre et affiche l'accueil",
+    (WidgetTester tester) async {
+      final cache = _MemoryCache();
+      await cache.save('has_completed_onboarding', true);
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          localCacheProvider.overrideWithValue(cache),
-        ],
-        child: const AhiyoyoApp(),
-      ),
-    );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [localCacheProvider.overrideWithValue(cache)],
+          child: const AhiyoyoApp(),
+        ),
+      );
 
-    for (int i = 0; i < 8; i++) {
-      await tester.pump(const Duration(milliseconds: 300));
-    }
-    await tester.pump(const Duration(milliseconds: 500));
+      for (int i = 0; i < 8; i++) {
+        await tester.pump(const Duration(milliseconds: 300));
+      }
+      await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.text('AHIYOYO'), findsOneWidget);
-    expect(find.text('Accueil'), findsOneWidget);
-    expect(find.text('Mes colis'), findsOneWidget);
-    expect(find.text('Commandes'), findsOneWidget);
-  });
+      expect(find.text('AHIYOYO'), findsOneWidget);
+      expect(find.text('Accueil'), findsOneWidget);
+      expect(find.text('Mes colis'), findsOneWidget);
+      expect(find.text('Commandes'), findsOneWidget);
+    },
+  );
 }

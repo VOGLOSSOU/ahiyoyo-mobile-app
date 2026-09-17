@@ -33,17 +33,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     OnboardingItem(
       imagePath: 'ressources/au-port.png',
       title: 'Tout le commerce international depuis votre téléphone.',
-      description: 'Expédiez, suivez et recevez vos colis depuis l’Afrique vers le monde entier, en quelques tapes.',
+      description:
+          'Expédiez, suivez et recevez vos colis depuis l’Afrique vers le monde entier, en quelques tapes.',
     ),
     OnboardingItem(
       imagePath: 'ressources/groupage.png',
       title: 'Des tarifs qui baissent avec la taille du conteneur.',
-      description: 'Profitez de nos groupages collectifs (maritime et aérien) pour payer moins par CBM ou KG partagé.',
+      description:
+          'Profitez de nos groupages collectifs (maritime et aérien) pour payer moins par CBM ou KG partagé.',
     ),
     OnboardingItem(
       imagePath: 'ressources/sourcing.png',
       title: 'De la source Chine au suivi réel de votre colis.',
-      description: 'Trouvez des fournisseurs, faites vos achats et suivez chaque étape jusqu’au retrait en entrepôt.',
+      description:
+          'Trouvez des fournisseurs, faites vos achats et suivez chaque étape jusqu’au retrait en entrepôt.',
     ),
   ];
 
@@ -60,6 +63,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     _pageController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,43 +77,32 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primary, width: 1),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: Image.asset(
-                          'ressources/ahiyoyo-logo.jpg',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Text(
-                                'AH',
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
+                  Container(
+                    width: 80,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Image.asset(
+                      'ressources/ahiyoyo-logo.jpg',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: AppColors.primary,
+                          child: const Center(
+                            child: Text(
+                              'Ahiyoyo',
+                              style: TextStyle(
+                                color: AppColors.onPrimary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Ahiyoyo',
-                        style: TextStyle(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                   TextButton(
                     onPressed: _finishOnboarding,
@@ -153,7 +146,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             decoration: BoxDecoration(
                               color: AppColors.surface,
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: AppColors.border, width: 1),
+                              border: Border.all(
+                                color: AppColors.border,
+                                width: 1,
+                              ),
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: Image.asset(
@@ -271,4 +267,3 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 }
-
