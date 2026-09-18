@@ -107,13 +107,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24, 80, 24, 136),
                       child: Align(
-                        alignment: Alignment.bottomLeft,
+                        alignment: Alignment.bottomCenter,
                         child: SingleChildScrollView(
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 560),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
                                   width: 40,
@@ -126,6 +126,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                 ),
                                 Text(
                                   item.title,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize:
@@ -140,6 +141,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                 const SizedBox(height: 16),
                                 Text(
                                   item.description,
+                                  textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     color: Color(0xFFE5E5E5),
                                     fontSize: 16,
@@ -198,7 +200,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                   const Spacer(),
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.center,
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 560),
                       child: Column(
@@ -208,6 +210,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             label:
                                 'Page ${_currentIndex + 1} sur ${_items.length}',
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: List.generate(
                                 _items.length,
                                 (index) => AnimatedContainer(

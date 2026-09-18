@@ -127,16 +127,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   child: Opacity(
                     opacity: _opacityAnimation.value,
                     child: Container(
-                      width: 100,
-                      height: 100,
+                      width: 180,
+                      height: 72,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.primary, width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.primary, width: 1.5),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primary.withValues(alpha: 0.3),
-                            blurRadius: 20,
-                            spreadRadius: 5,
+                            blurRadius: 24,
+                            spreadRadius: 4,
                           ),
                         ],
                       ),
