@@ -66,7 +66,9 @@ void main() {
         ),
       );
 
-      for (int i = 0; i < 10; i++) {
+      // Le splash dure désormais ~6s (animation + préchargement des images
+      // d'onboarding), il faut donc avancer le temps virtuel en conséquence.
+      for (int i = 0; i < 24; i++) {
         await tester.pump(const Duration(milliseconds: 300));
       }
       await tester.pump(const Duration(milliseconds: 500));
@@ -90,7 +92,7 @@ void main() {
         ),
       );
 
-      for (int i = 0; i < 8; i++) {
+      for (int i = 0; i < 24; i++) {
         await tester.pump(const Duration(milliseconds: 300));
       }
       await tester.pump(const Duration(milliseconds: 500));

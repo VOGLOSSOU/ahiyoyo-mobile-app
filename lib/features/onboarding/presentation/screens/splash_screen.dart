@@ -20,16 +20,28 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   bool _navigated = false;
 
+  /// Durée minimale d'affichage du splash, à chaque lancement (première fois
+  /// comme suivantes), le temps que le logo fasse son animation de
+  /// va-et-vient et que les visuels de l'onboarding soient préchargés.
+  static const Duration _minSplashDuration = Duration(seconds: 6);
+
+  static const List<String> _onboardingImagePaths = [
+    'ressources/au-port.png',
+    'ressources/groupage.png',
+    'ressources/sourcing.png',
+  ];
+
   @override
   void initState() {
     super.initState();
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 900),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 0.9, end: 1.1).animate(
+    // Effet "pull / push" : le logo grossit et rétrécit en boucle.
+    _scaleAnimation = Tween<double>(begin: 0.85, end: 1.15).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
@@ -37,10 +49,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    // Phase de préalading : vérifie l'état d'onboarding (extensible ici
-    // avec d'autres checks comme une mise à jour forcée).
-    // addPostFrameCallback garantit que le GoRouter est attaché au context
-    // avant d'appeler context.go (évite les erreurs dans initState).
+    // addPostFrameCallback garantit que le GoRouter et MediaQuery sont
+    // attachés au context avant de préchager des images ou de naviguer.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initialize();
     });
@@ -58,9 +68,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     final result = await cache.get('has_completed_onboarding');
     final hasCompleted = result == true;
 
-    // Durée minimale d'affichage pour apprécier l'animation du logo.
-    await Future<void>.delayed(const Duration(milliseconds: 1500));
+    // On attend à la fois la durée minimale du splash ET le préchargement
+    // des images de l'onboarding (~2-3 Mo chacune), pour ne jamais afficher
+    // l'onboarding avec des images qui "pop-in".
+    await Future.wait([
+      Future<void>.delayed(_minSplashDuration),
+      _precacheOnboardingImages(),
+    ]);
+
     return hasCompleted;
+  }
+
+  Future<void> _precacheOnboardingImages() async {
+    if (!mounted) return;
+    try {
+      await Future.wait(
+        _onboardingImagePaths.map(
+          (path) => precacheImage(AssetImage(path), context),
+        ),
+      ).timeout(const Duration(seconds: 5), onTimeout: () => <void>[]);
+    } catch (_) {
+      // Une image manquante, corrompue ou trop lente à décoder ne doit
+      // jamais bloquer indéfiniment le lancement de l'application.
+    }
   }
 
   void _navigate(bool hasCompleted) {
