@@ -158,15 +158,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 );
               },
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Commerce & Logistique Internationale',
-              style: TextStyle(
-                color: AppColors.onPrimary.withValues(alpha: 0.75),
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
           ],
         ),
       ),
