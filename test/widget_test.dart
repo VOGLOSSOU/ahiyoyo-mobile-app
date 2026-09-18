@@ -73,7 +73,7 @@ void main() {
       }
       await tester.pump(const Duration(milliseconds: 500));
 
-      expect(find.textContaining('commerce international'), findsOneWidget);
+      expect(find.textContaining('Achetez, vendez et expédiez'), findsOneWidget);
       expect(find.text('Passer'), findsOneWidget);
       expect(find.text('Suivant'), findsOneWidget);
     },
