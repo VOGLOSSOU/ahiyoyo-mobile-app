@@ -114,7 +114,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      // Fond doré de marque en plein écran : le logo partage exactement
+      // cette même teinte en arrière-plan, il se fond donc dans la page
+      // sans cadre ni ombre visible.
+      backgroundColor: AppColors.primary,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,58 +129,42 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   scale: _scaleAnimation.value,
                   child: Opacity(
                     opacity: _opacityAnimation.value,
-                    child: Container(
-                      width: 180,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.primary, width: 1.5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.3),
-                            blurRadius: 24,
-                            spreadRadius: 4,
+                    child: Image.asset(
+                      'ressources/ahiyoyo-logo.jpg',
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 200,
+                          height: 200,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ],
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.asset(
-                        'ressources/ahiyoyo-logo.jpg',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(
-                            child: Text(
-                              'AH',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                              ),
+                          child: const Text(
+                            'ahiyoyo',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 26,
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );
               },
             ),
-            const SizedBox(height: 24),
-            const Text(
-              'Ahiyoyo',
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
+            const SizedBox(height: 20),
+            Text(
               'Commerce & Logistique Internationale',
               style: TextStyle(
-                color: AppColors.textSecondary,
+                color: AppColors.onPrimary.withValues(alpha: 0.75),
                 fontSize: 13,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
