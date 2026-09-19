@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../app/providers/app_providers.dart';
 import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
@@ -8,40 +10,47 @@ import '../../../../core/widgets/ahiyoyo_badge.dart';
 import '../../../../core/widgets/ahiyoyo_button.dart';
 import '../../../../core/widgets/ahiyoyo_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool isAuthenticated = ref.watch(isAuthenticatedProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: const Text(
-                'A',
-                style: TextStyle(
-                  color: AppColors.onPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
+        title: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: Image.asset(
+            'ressources/ahiyoyo-logo.jpg',
+            width: 84,
+            height: 32,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => const Text(
+              'AHIYOYO',
+              style: AppTypography.titleMedium,
             ),
-            const SizedBox(width: 10),
-            const Text('AHIYOYO', style: AppTypography.titleMedium),
-          ],
+          ),
         ),
         actions: [
           IconButton(
             icon: const Icon(LucideIcons.bell, size: 22),
-            onPressed: () => context.go(AppRoutes.notifications),
+            onPressed: () => context.push(AppRoutes.notifications),
+          ),
+          IconButton(
+            icon: Icon(
+              isAuthenticated ? LucideIcons.user_round : LucideIcons.user,
+              size: 22,
+            ),
+            onPressed: () {
+              if (isAuthenticated) {
+                context.go(AppRoutes.profile);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Connexion bientôt disponible')),
+                );
+              }
+            },
           ),
           const SizedBox(width: 8),
         ],

@@ -15,7 +15,9 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(de
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 /// Configuration GoRouter respectant la règle d'or :
-/// - Seuls les 5 onglets principaux sont dans le ShellRoute
+/// - Seuls les 4 onglets de la navbar (Accueil, Colis, Commandes, Profil)
+///   sont dans le ShellRoute. Le bouton central "+" n'est pas un onglet :
+///   il ouvre une feuille modale d'actions rapides.
 /// - TOUTES les pages de détail / formulaires sont top-level avec `parentNavigatorKey: _rootNavigatorKey`
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
@@ -52,12 +54,6 @@ final GoRouter appRouter = GoRouter(
           ),
         ),
         GoRoute(
-          path: AppRoutes.notifications,
-          pageBuilder: (context, state) => const NoTransitionPage(
-            child: NotificationsScreen(),
-          ),
-        ),
-        GoRoute(
           path: AppRoutes.profile,
           pageBuilder: (context, state) => const NoTransitionPage(
             child: ProfileScreen(),
@@ -71,6 +67,11 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.tracking,
       builder: (context, state) => const TrackingScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.notifications,
+      builder: (context, state) => const NotificationsScreen(),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
