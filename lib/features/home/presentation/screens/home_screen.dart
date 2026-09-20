@@ -17,17 +17,14 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: Image.asset(
-            'ressources/ahiyoyo-logo.jpg',
-            width: 84,
-            height: 32,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => const Text(
-              'AHIYOYO',
-              style: AppTypography.titleMedium,
-            ),
+        title: Image.asset(
+          'ressources/ahiyoyo-logo-removebg-preview.png',
+          width: 84,
+          height: 32,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => const Text(
+            'AHIYOYO',
+            style: AppTypography.titleMedium,
           ),
         ),
         actions: [
