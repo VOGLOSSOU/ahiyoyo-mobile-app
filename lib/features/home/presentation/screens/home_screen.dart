@@ -11,43 +11,83 @@ import '../../../../core/widgets/ahiyoyo_card.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
+  // Placeholder en attendant le vrai flux de notifications (Lot 3).
+  static const int _unreadNotificationsCount = 3;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isAuthenticated = ref.watch(isAuthenticatedProvider);
 
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 16,
         title: Image.asset(
-          'ressources/ahiyoyo-logo-removebg-preview.png',
-          width: 84,
-          height: 32,
-          fit: BoxFit.cover,
+          'ressources/ahiyoyo-logo-nobg.png',
+          width: 115,
+          height: 44,
+          fit: BoxFit.contain,
+          alignment: Alignment.centerLeft,
           errorBuilder: (context, error, stackTrace) => const Text(
             'AHIYOYO',
             style: AppTypography.titleMedium,
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.bell, size: 22),
-            onPressed: () => context.push(AppRoutes.notifications),
-          ),
-          IconButton(
-            icon: Icon(
-              isAuthenticated ? LucideIcons.user_round : LucideIcons.user,
-              size: 22,
+          if (isAuthenticated)
+            IconButton(
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  const Icon(LucideIcons.bell, size: 22),
+                  if (_unreadNotificationsCount > 0)
+                    Positioned(
+                      right: -5,
+                      top: -4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                        constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '$_unreadNotificationsCount',
+                          style: const TextStyle(
+                            color: AppColors.onPrimary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              onPressed: () => context.push(AppRoutes.notifications),
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: OutlinedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Connexion bientôt disponible')),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.primary),
+                  minimumSize: const Size(0, 36),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: const Text(
+                  'Se connecter',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                ),
+              ),
             ),
-            onPressed: () {
-              if (isAuthenticated) {
-                context.go(AppRoutes.profile);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Connexion bientôt disponible')),
-                );
-              }
-            },
-          ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
         ],
       ),
       body: SingleChildScrollView(
@@ -128,26 +168,6 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Bandeau de bienvenue / CGU info
-                  AhiyoyoCard(
-                    backgroundColor: AppColors.surface,
-                    borderColor: AppColors.border,
-                    padding: const EdgeInsets.all(14),
-                    child: Row(
-                      children: [
-                        const Icon(LucideIcons.info, color: AppColors.primary, size: 20),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                          child: Text(
-                            'Bienvenue sur Ahiyoyo V2. Enregistrez et suivez vos colis en toute simplicité.',
-                            style: AppTypography.caption,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
                   // Accès rapides
                   const Text('Actions rapides', style: AppTypography.titleSmall),
                   const SizedBox(height: 10),
@@ -171,6 +191,45 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Notifications récentes
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Notifications récentes', style: AppTypography.titleSmall),
+                      TextButton(
+                        onPressed: () => context.push(AppRoutes.notifications),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: const Size(0, 0),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          'Voir tout',
+                          style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  _NotificationPreviewTile(
+                    icon: LucideIcons.package,
+                    iconColor: AppColors.statusSubmitted,
+                    iconBackground: AppColors.statusSubmittedBg,
+                    title: 'Colis reçu à l\'entrepôt',
+                    subtitle: 'Votre colis AHI-849204 a bien été réceptionné à Guangzhou.',
+                    time: 'Il y a 2 heures',
+                  ),
+                  const SizedBox(height: 10),
+                  _NotificationPreviewTile(
+                    icon: LucideIcons.ship,
+                    iconColor: AppColors.primary,
+                    iconBackground: AppColors.primaryMuted,
+                    title: 'Groupage maritime à 65%',
+                    subtitle: 'Le conteneur Chine ➔ Cotonou se remplit vite, participez avant clôture.',
+                    time: 'Il y a 5 heures',
                   ),
                   const SizedBox(height: 32),
                 ],
@@ -240,6 +299,59 @@ class _StoryCircle extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Aperçu compact d'une notification, utilisé dans la section
+/// "Notifications récentes" de la home.
+class _NotificationPreviewTile extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBackground;
+  final String title;
+  final String subtitle;
+  final String time;
+
+  const _NotificationPreviewTile({
+    required this.icon,
+    required this.iconColor,
+    required this.iconBackground,
+    required this.title,
+    required this.subtitle,
+    required this.time,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AhiyoyoCard(
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: iconBackground,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppTypography.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 4),
+                Text(subtitle, style: AppTypography.bodySecondary, maxLines: 2, overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 6),
+                Text(time, style: AppTypography.captionTertiary),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -90,52 +90,50 @@ class AppShell extends StatelessWidget {
 
     return Scaffold(
       body: child,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showQuickActions(context),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.onPrimary,
-        elevation: 2,
-        shape: const CircleBorder(),
-        child: const Icon(LucideIcons.plus, size: 26),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.background,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8,
-        padding: EdgeInsets.zero,
-        child: SizedBox(
-          height: 56,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(
-                icon: LucideIcons.house,
-                label: 'Accueil',
-                selected: selectedIndex == 0,
-                onTap: () => _onItemTapped(0, context),
-              ),
-              _NavItem(
-                icon: LucideIcons.package,
-                label: 'Mes colis',
-                selected: selectedIndex == 1,
-                onTap: () => _onItemTapped(1, context),
-              ),
-              // Espace réservé à l'encoche du bouton central "+".
-              const SizedBox(width: 48),
-              _NavItem(
-                icon: LucideIcons.truck,
-                label: 'Commandes',
-                selected: selectedIndex == 2,
-                onTap: () => _onItemTapped(2, context),
-              ),
-              _NavItem(
-                icon: LucideIcons.user,
-                label: 'Profil',
-                selected: selectedIndex == 3,
-                onTap: () => _onItemTapped(3, context),
-              ),
-            ],
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: AppColors.background,
+          border: Border(top: BorderSide(color: AppColors.border, width: 0.8)),
+        ),
+        child: SafeArea(
+          child: SizedBox(
+            height: 58,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _NavItem(
+                  icon: LucideIcons.house,
+                  label: 'Accueil',
+                  selected: selectedIndex == 0,
+                  onTap: () => _onItemTapped(0, context),
+                ),
+                _NavItem(
+                  icon: LucideIcons.package,
+                  label: 'Mes colis',
+                  selected: selectedIndex == 1,
+                  onTap: () => _onItemTapped(1, context),
+                ),
+                _NavItem(
+                  icon: LucideIcons.plus,
+                  label: 'Ajouter',
+                  selected: false,
+                  isAction: true,
+                  onTap: () => _showQuickActions(context),
+                ),
+                _NavItem(
+                  icon: LucideIcons.truck,
+                  label: 'Commandes',
+                  selected: selectedIndex == 2,
+                  onTap: () => _onItemTapped(2, context),
+                ),
+                _NavItem(
+                  icon: LucideIcons.user,
+                  label: 'Profil',
+                  selected: selectedIndex == 3,
+                  onTap: () => _onItemTapped(3, context),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -148,12 +146,14 @@ class _NavItem extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
+  final bool isAction;
 
   const _NavItem({
     required this.icon,
     required this.label,
     required this.selected,
     required this.onTap,
+    this.isAction = false,
   });
 
   @override
@@ -168,11 +168,23 @@ class _NavItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 20, color: color),
+            if (isAction)
+              Container(
+                width: 26,
+                height: 26,
+                decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                child: const Icon(LucideIcons.plus, size: 17, color: AppColors.onPrimary),
+              )
+            else
+              Icon(icon, size: 20, color: color),
             const SizedBox(height: 3),
             Text(
               label,
-              style: TextStyle(fontSize: 11, color: color, fontWeight: selected ? FontWeight.w600 : FontWeight.normal),
+              style: TextStyle(
+                fontSize: 11,
+                color: isAction ? AppColors.primary : color,
+                fontWeight: selected || isAction ? FontWeight.w600 : FontWeight.normal,
+              ),
             ),
           ],
         ),
