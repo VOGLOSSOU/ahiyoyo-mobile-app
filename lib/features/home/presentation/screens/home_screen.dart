@@ -95,27 +95,28 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Annonces en cours (groupage maritime / aérien) façon stories
+            // Annonces en cours (groupage maritime / aérien / tarifs) façon stories
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                height: 100,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _StoryCircle(
-                      icon: LucideIcons.ship,
-                      label: 'Groupage maritime',
-                      onTap: () => context.push('/sea-groupage/current'),
-                    ),
-                    const SizedBox(width: 16),
-                    _StoryCircle(
-                      icon: LucideIcons.plane,
-                      label: 'Groupage aérien',
-                      onTap: () => context.push('/air-offers/current'),
-                    ),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _StoryCircle(
+                    icon: LucideIcons.ship,
+                    label: 'Groupage maritime',
+                    onTap: () => context.push('/sea-groupage/current'),
+                  ),
+                  _StoryCircle(
+                    icon: LucideIcons.plane,
+                    label: 'Groupage aérien',
+                    onTap: () => context.push('/air-offers/current'),
+                  ),
+                  _StoryCircle(
+                    icon: LucideIcons.map_pin,
+                    label: 'Adresses & tarifs',
+                    onTap: () => context.push(AppRoutes.tariffs),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),
@@ -177,7 +178,7 @@ class HomeScreen extends ConsumerWidget {
                         child: _QuickActionCard(
                           icon: LucideIcons.package_plus,
                           title: 'Nouvelle expédition',
-                          subtitle: 'Bateau ou avion',
+                          subtitle: 'Enregistrer vos colis prêts à être expédiés',
                           onTap: () {},
                         ),
                       ),
@@ -186,7 +187,7 @@ class HomeScreen extends ConsumerWidget {
                         child: _QuickActionCard(
                           icon: LucideIcons.file_text,
                           title: 'Demande de devis',
-                          subtitle: 'Achat & Sourcing',
+                          subtitle: 'Demander un devis pour une commande',
                           onTap: () {},
                         ),
                       ),
@@ -389,7 +390,7 @@ class _QuickActionCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(title, style: AppTypography.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
           const SizedBox(height: 2),
-          Text(subtitle, style: AppTypography.captionTertiary, maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(subtitle, style: AppTypography.captionTertiary, maxLines: 2, overflow: TextOverflow.ellipsis),
         ],
       ),
     );

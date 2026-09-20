@@ -7,6 +7,7 @@ import '../../features/notifications/presentation/screens/notifications_screen.d
 import '../../features/orders/presentation/screens/orders_screen.dart';
 import '../../features/parcels/presentation/screens/parcels_screen.dart';
 import '../../features/settings/presentation/screens/profile_screen.dart';
+import '../../features/settings/presentation/screens/tariffs_screen.dart';
 import '../../features/tracking/presentation/screens/tracking_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/onboarding/presentation/screens/splash_screen.dart';
@@ -84,6 +85,11 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.airOfferDetail,
       builder: (context, state) => AirOfferDetailScreen(id: state.pathParameters['id']!),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.tariffs,
+      builder: (context, state) => const TariffsScreen(),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,

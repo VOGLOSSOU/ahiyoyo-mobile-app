@@ -175,17 +175,18 @@ class _NavItem extends StatelessWidget {
                 decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
                 child: const Icon(LucideIcons.plus, size: 17, color: AppColors.onPrimary),
               )
-            else
+            else ...[
               Icon(icon, size: 20, color: color),
-            const SizedBox(height: 3),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                color: isAction ? AppColors.primary : color,
-                fontWeight: selected || isAction ? FontWeight.w600 : FontWeight.normal,
+              const SizedBox(height: 3),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: color,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),

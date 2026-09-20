@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/ahiyoyo_button.dart';
@@ -107,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
           _SettingsTile(
             icon: LucideIcons.map_pin,
             title: 'Tarifs & Adresses des entrepôts',
-            onTap: () {},
+            onTap: () => context.push(AppRoutes.tariffs),
           ),
           _SettingsTile(
             icon: LucideIcons.calculator,
