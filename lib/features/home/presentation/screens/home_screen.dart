@@ -87,26 +87,6 @@ class HomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Bandeau de bienvenue / CGU info
-                  AhiyoyoCard(
-                    backgroundColor: AppColors.surface,
-                    borderColor: AppColors.border,
-                    padding: const EdgeInsets.all(14),
-                    child: Row(
-                      children: [
-                        const Icon(LucideIcons.info, color: AppColors.primary, size: 20),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                          child: Text(
-                            'Bienvenue sur Ahiyoyo V2. Enregistrez et suivez vos colis en toute simplicité.',
-                            style: AppTypography.caption,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-
                   // Bloc de suivi rapide
                   const Text('Suivi de colis ou commande', style: AppTypography.titleSmall),
                   const SizedBox(height: 8),
@@ -144,6 +124,26 @@ class HomeScreen extends ConsumerWidget {
                                 Text('Suivre', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                               ],
                             ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Bandeau de bienvenue / CGU info
+                  AhiyoyoCard(
+                    backgroundColor: AppColors.surface,
+                    borderColor: AppColors.border,
+                    padding: const EdgeInsets.all(14),
+                    child: Row(
+                      children: [
+                        const Icon(LucideIcons.info, color: AppColors.primary, size: 20),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Text(
+                            'Bienvenue sur Ahiyoyo V2. Enregistrez et suivez vos colis en toute simplicité.',
+                            style: AppTypography.caption,
                           ),
                         ),
                       ],
