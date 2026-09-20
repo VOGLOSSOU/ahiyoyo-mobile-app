@@ -97,10 +97,12 @@ void main() {
       }
       await tester.pump(const Duration(milliseconds: 500));
 
-      expect(find.text('AHIYOYO'), findsOneWidget);
       expect(find.text('Accueil'), findsOneWidget);
       expect(find.text('Mes colis'), findsOneWidget);
       expect(find.text('Commandes'), findsOneWidget);
+      expect(find.text('Profil'), findsOneWidget);
+      expect(find.text('Groupage maritime'), findsOneWidget);
+      expect(find.text('Groupage aérien'), findsOneWidget);
     },
   );
 }

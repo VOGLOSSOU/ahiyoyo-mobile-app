@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/groupage/presentation/screens/air_offer_detail_screen.dart';
+import '../../features/groupage/presentation/screens/sea_groupage_detail_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/orders/presentation/screens/orders_screen.dart';
@@ -72,6 +74,16 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.notifications,
       builder: (context, state) => const NotificationsScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.seaGroupageDetail,
+      builder: (context, state) => SeaGroupageDetailScreen(id: state.pathParameters['id']!),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.airOfferDetail,
+      builder: (context, state) => AirOfferDetailScreen(id: state.pathParameters['id']!),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
