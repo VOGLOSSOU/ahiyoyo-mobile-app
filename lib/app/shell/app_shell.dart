@@ -121,7 +121,7 @@ class AppShell extends StatelessWidget {
                   onTap: () => _showQuickActions(context),
                 ),
                 _NavItem(
-                  icon: LucideIcons.truck,
+                  icon: LucideIcons.shopping_bag,
                   label: 'Commandes',
                   selected: selectedIndex == 2,
                   onTap: () => _onItemTapped(2, context),
