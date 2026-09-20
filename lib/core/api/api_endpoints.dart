@@ -1,17 +1,20 @@
 /// Points de terminaison (endpoints) de l'API Ahiyoyo.
 abstract class ApiEndpoints {
   /// Base URL par défaut (configurable par variable d'environnement ou override)
-  static const String defaultBaseUrl = 'https://api.ahiyoyo.com/api/v1';
+  static const String defaultBaseUrl = 'https://api.ahiyoyo.com';
 
-  // --- Authentification & Utilisateur ---
-  static const String login = '/auth/login';
-  static const String register = '/auth/register';
-  static const String loginGoogle = '/auth/google';
-  static const String verifyOtp = '/auth/verify-otp';
-  static const String forgotPassword = '/auth/forgot-password';
-  static const String resetPassword = '/auth/reset-password';
-  static const String refreshToken = '/auth/refresh';
-  static const String profile = '/auth/profile';
+  // --- Authentification & Utilisateur (contrat docs-from-api/01_AUTHENTIFICATION_FLUTTER.md) ---
+  static const String register = '/api/register';
+  static const String verifyReferralCode = '/api/parrainage/verifier';
+  static const String activateEmail = '/api/email/activate';
+  static const String resendActivation = '/api/email/resend-activation';
+  static const String login = '/api/login';
+  static const String loginGoogle = '/api/auth/google';
+  static const String forgotPassword = '/api/password/forgot';
+  static const String resetPassword = '/api/password/reset';
+  static const String me = '/api/me';
+  static const String updateProfile = '/api/me/profile';
+  static const String changePassword = '/api/auth/change-password';
 
   // --- Suivi Public & Tracking ---
   static const String track = '/tracking';
@@ -44,9 +47,8 @@ abstract class ApiEndpoints {
   // --- Tarifs & Adresses ---
   static const String tariffs = '/tariffs';
 
-  // --- Parrainage ---
+  // --- Parrainage (tableau de bord "Gagner de l'argent", Lot 3) ---
   static const String referral = '/referral';
-  static const String referralCheck = '/referral/check';
   static const String referralEarnings = '/referral/earnings';
 
   // --- Notifications ---

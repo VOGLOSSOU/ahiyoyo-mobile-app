@@ -16,8 +16,7 @@ class SecureStorageService {
             );
 
   static const String _keyAccessToken = 'ahiyoyo_access_token';
-  static const String _keyRefreshToken = 'ahiyoyo_refresh_token';
-  static const String _keyUserId = 'ahiyoyo_user_id';
+  static const String _keyExpiresAt = 'ahiyoyo_expires_at';
 
   Future<void> _ensureWebPrefs() async {
     if (kIsWeb && _webPrefs == null) {
@@ -53,36 +52,24 @@ class SecureStorageService {
     await _secureStorage.delete(key: key);
   }
 
-  Future<void> deleteAll() async {
-    if (kIsWeb) {
-      await _ensureWebPrefs();
-      await _webPrefs?.remove(_keyAccessToken);
-      await _webPrefs?.remove(_keyRefreshToken);
-      await _webPrefs?.remove(_keyUserId);
-      return;
-    }
-    await _secureStorage.deleteAll();
-  }
-
-  // --- Helpers dédiés aux Tokens ---
-  Future<void> saveTokens({required String accessToken, String? refreshToken}) async {
+  // --- Helpers dédiés à la session d'authentification ---
+  // L'API Ahiyoyo n'utilise ni cookie ni refresh token : un seul jeton,
+  // avec une échéance (`expiresAt`) à respecter côté client.
+  Future<void> saveSession({required String accessToken, required DateTime expiresAt}) async {
     await write(_keyAccessToken, accessToken);
-    if (refreshToken != null) {
-      await write(_keyRefreshToken, refreshToken);
-    }
+    await write(_keyExpiresAt, expiresAt.toIso8601String());
   }
 
   Future<String?> getAccessToken() => read(_keyAccessToken);
 
-  Future<String?> getRefreshToken() => read(_keyRefreshToken);
-
-  Future<void> saveUserId(String id) => write(_keyUserId, id);
-
-  Future<String?> getUserId() => read(_keyUserId);
+  Future<DateTime?> getExpiresAt() async {
+    final raw = await read(_keyExpiresAt);
+    if (raw == null) return null;
+    return DateTime.tryParse(raw);
+  }
 
   Future<void> clearSession() async {
     await delete(_keyAccessToken);
-    await delete(_keyRefreshToken);
-    await delete(_keyUserId);
+    await delete(_keyExpiresAt);
   }
 }

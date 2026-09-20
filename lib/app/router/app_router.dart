@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/auth/presentation/screens/change_password_screen.dart';
+import '../../features/auth/presentation/screens/email_activation_screen.dart';
+import '../../features/auth/presentation/screens/forgot_password_screen.dart';
+import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/register_screen.dart';
+import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/groupage/presentation/screens/air_offer_detail_screen.dart';
 import '../../features/groupage/presentation/screens/sea_groupage_detail_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
@@ -95,6 +101,44 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.onboarding,
       builder: (context, state) => const OnboardingScreen(),
+    ),
+
+    // --- Authentification ---
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.login,
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.register,
+      builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.emailActivation,
+      builder: (context, state) => EmailActivationScreen(email: state.extra as String),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.forgotPassword,
+      builder: (context, state) {
+        final email = state.extra is String ? state.extra as String : null;
+        return ForgotPasswordScreen(initialEmail: (email?.isEmpty ?? true) ? null : email);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.resetPassword,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return ResetPasswordScreen(email: extra['email'] as String, ttlSeconds: extra['ttlSeconds'] as int);
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.changePassword,
+      builder: (context, state) => const ChangePasswordScreen(),
     ),
   ],
 );

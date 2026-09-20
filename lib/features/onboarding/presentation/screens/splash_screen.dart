@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/providers/app_providers.dart';
 import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
+import '../../../auth/presentation/controllers/auth_controller.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -48,6 +49,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _opacityAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
+
+    // Amorce la restauration de session (lecture du stockage sécurisé puis
+    // GET /api/me) pendant l'animation, pour éviter un flash "non connecté"
+    // à l'arrivée sur la home si l'utilisateur a déjà une session valide.
+    ref.read(authControllerProvider);
 
     // addPostFrameCallback garantit que le GoRouter et MediaQuery sont
     // attachés au context avant de préchager des images ou de naviguer.

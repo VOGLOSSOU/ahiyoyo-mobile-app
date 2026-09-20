@@ -23,7 +23,13 @@ abstract class AppRoutes {
   static const String tariffs = '/tariffs';
   static const String freightCalculator = '/freight-calculator';
   static const String onboarding = '/onboarding';
+
+  // --- Authentification ---
+  static const String authLanding = '/auth';
   static const String login = '/login';
   static const String register = '/register';
+  static const String emailActivation = '/activate-email';
   static const String forgotPassword = '/forgot-password';
+  static const String resetPassword = '/reset-password';
+  static const String changePassword = '/change-password';
 }

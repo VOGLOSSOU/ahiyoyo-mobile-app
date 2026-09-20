@@ -72,32 +72,50 @@ class ErrorInterceptor extends Interceptor {
         message = rawMessage['message'] as String;
       }
 
-      // 3. Extraction des détails de validation
-      if (data['details'] is Map<String, dynamic>) {
-        details = data['details'] as Map<String, dynamic>;
+      // 3. Extraction des erreurs de champ. L'API Ahiyoyo retourne
+      // `errors: [{ msg, path }, ...]` (une LISTE, pas une map) — on la
+      // convertit en `{ path: msg }` pour un lookup direct côté formulaires.
+      if (data['errors'] is List) {
+        final fieldErrors = <String, dynamic>{};
+        for (final entry in data['errors'] as List) {
+          if (entry is Map && entry['path'] is String && entry['msg'] is String) {
+            fieldErrors[entry['path'] as String] = entry['msg'] as String;
+          }
+        }
+        if (fieldErrors.isNotEmpty) details = fieldErrors;
       } else if (data['errors'] is Map<String, dynamic>) {
         details = data['errors'] as Map<String, dynamic>;
+      } else if (data['details'] is Map<String, dynamic>) {
+        details = data['details'] as Map<String, dynamic>;
       }
     } else if (data is String && data.isNotEmpty) {
       message = data;
     }
 
+    // On construit toujours l'exception via le constructeur de base pour ne
+    // jamais perdre `code` (ex. GOOGLE_ONLY_ACCOUNT sur un 401) ni `details`.
     switch (statusCode) {
       case 400:
-        return AppException.validation(message: message, details: details);
-      case 401:
-        return AppException.unauthorized(message);
-      case 403:
-        return AppException.forbidden(message);
-      case 404:
-        return AppException.notFound(message);
       case 422:
-        return AppException.validation(message: message, details: details);
+        return AppException(
+          message: message,
+          code: code ?? 'VALIDATION_ERROR',
+          statusCode: statusCode,
+          details: details,
+        );
+      case 401:
+        return AppException(message: message, code: code ?? 'UNAUTHORIZED', statusCode: 401, details: details);
+      case 403:
+        return AppException(message: message, code: code ?? 'FORBIDDEN', statusCode: 403, details: details);
+      case 404:
+        return AppException(message: message, code: code ?? 'NOT_FOUND', statusCode: 404, details: details);
+      case 429:
+        return AppException(message: message, code: code ?? 'TOO_MANY_REQUESTS', statusCode: 429, details: details);
       case 500:
       case 502:
       case 503:
       case 504:
-        return AppException.server(message, statusCode);
+        return AppException(message: message, code: code ?? 'SERVER_ERROR', statusCode: statusCode, details: details);
       default:
         return AppException(message: message, code: code, statusCode: statusCode, details: details);
     }

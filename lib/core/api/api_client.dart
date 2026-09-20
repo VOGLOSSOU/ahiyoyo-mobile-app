@@ -7,11 +7,11 @@ import 'error_interceptor.dart';
 /// Client HTTP unifié Dio configuré pour l'API Ahiyoyo.
 class ApiClient {
   late final Dio dio;
+  late final AuthInterceptor _authInterceptor;
 
   ApiClient({
     required SecureStorageService secureStorage,
     String? baseUrl,
-    void Function()? onSessionExpired,
   }) {
     dio = Dio(
       BaseOptions(
@@ -26,16 +26,20 @@ class ApiClient {
       ),
     );
 
+    _authInterceptor = AuthInterceptor(secureStorage: secureStorage);
+
     // Ordre des intercepteurs :
-    // 1. AuthInterceptor (injection token et retry sur refresh)
+    // 1. AuthInterceptor (injection du Bearer token, déconnexion sur 401)
     // 2. ErrorInterceptor (mapping des erreurs en AppException)
     dio.interceptors.addAll([
-      AuthInterceptor(
-        secureStorage: secureStorage,
-        dio: dio,
-        onSessionExpired: onSessionExpired,
-      ),
+      _authInterceptor,
       ErrorInterceptor(),
     ]);
+  }
+
+  /// Branche le callback de déconnexion (appelé par [AuthController] pour
+  /// éviter une dépendance circulaire entre providers).
+  void setOnSessionExpired(void Function() callback) {
+    _authInterceptor.onSessionExpired = callback;
   }
 }

@@ -1,17 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/ahiyoyo_button.dart';
 import '../../../../core/widgets/ahiyoyo_card.dart';
+import '../../../auth/presentation/controllers/auth_controller.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
+
+    if (!authState.isAuthenticated) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Mon Profil', style: AppTypography.titleMedium)),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  radius: 32,
+                  backgroundColor: AppColors.primaryMuted,
+                  child: const Icon(LucideIcons.user, color: AppColors.primary, size: 30),
+                ),
+                const SizedBox(height: 16),
+                const Text('Vous n\'êtes pas connecté', style: AppTypography.titleMedium),
+                const SizedBox(height: 6),
+                const Text(
+                  'Connectez-vous pour accéder à votre profil, vos colis et vos commandes.',
+                  style: AppTypography.bodySecondary,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                AhiyoyoButton(
+                  text: 'Se connecter',
+                  onPressed: () => context.push(AppRoutes.login),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    final user = authState.user!;
+    final phone = user.numero == null ? null : '+${user.codePays ?? ''} ${user.numero}';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mon Profil', style: AppTypography.titleMedium),
@@ -30,15 +71,17 @@ class ProfileScreen extends StatelessWidget {
                   child: const Icon(LucideIcons.user, color: AppColors.primary, size: 28),
                 ),
                 const SizedBox(width: 14),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Nathan VOGLOSSOU', style: AppTypography.titleMedium),
-                      SizedBox(height: 2),
-                      Text('nathan@example.com', style: AppTypography.caption),
-                      SizedBox(height: 2),
-                      Text('+229 97 00 00 00', style: AppTypography.captionTertiary),
+                      Text(user.fullName, style: AppTypography.titleMedium),
+                      const SizedBox(height: 2),
+                      Text(user.email, style: AppTypography.caption),
+                      if (phone != null) ...[
+                        const SizedBox(height: 2),
+                        Text(phone, style: AppTypography.captionTertiary),
+                      ],
                     ],
                   ),
                 ),
@@ -47,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 18),
 
-          // Carte de Parrainage ("Gagner de l'argent")
+          // Carte de Parrainage ("Gagner de l'argent") — mock en attendant le Lot 3
           AhiyoyoCard(
             backgroundColor: AppColors.surfaceElevated,
             borderColor: AppColors.primary.withValues(alpha: 0.4),
@@ -119,7 +162,7 @@ class ProfileScreen extends StatelessWidget {
           _SettingsTile(
             icon: LucideIcons.shield_check,
             title: 'Sécurité & Mot de passe',
-            onTap: () {},
+            onTap: () => context.push(AppRoutes.changePassword),
           ),
           _SettingsTile(
             icon: LucideIcons.file_text,
@@ -131,7 +174,10 @@ class ProfileScreen extends StatelessWidget {
           AhiyoyoButton(
             text: 'Déconnexion',
             variant: AhiyoyoButtonVariant.destructive,
-            onPressed: () {},
+            onPressed: () async {
+              await ref.read(authControllerProvider.notifier).logout();
+              if (context.mounted) context.go(AppRoutes.home);
+            },
           ),
         ],
       ),
