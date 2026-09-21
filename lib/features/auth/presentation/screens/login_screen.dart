@@ -107,6 +107,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   style: AppTypography.bodySecondary,
                 ),
                 const SizedBox(height: 24),
+                AhiyoyoButton(
+                  text: 'Continuer avec Google',
+                  variant: AhiyoyoButtonVariant.secondary,
+                  onPressed: _onGoogleTap,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const Expanded(child: Divider(color: AppColors.border)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text('ou par email', style: AppTypography.captionTertiary),
+                    ),
+                    const Expanded(child: Divider(color: AppColors.border)),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 if (_globalError != null) ...[
                   AhiyoyoErrorBanner(message: _globalError!),
                   const SizedBox(height: 16),
@@ -188,23 +205,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   text: 'Se connecter',
                   isLoading: _isLoading,
                   onPressed: _isLoading ? null : _submit,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const Expanded(child: Divider(color: AppColors.border)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text('ou', style: AppTypography.captionTertiary),
-                    ),
-                    const Expanded(child: Divider(color: AppColors.border)),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                AhiyoyoButton(
-                  text: 'Continuer avec Google',
-                  variant: AhiyoyoButtonVariant.secondary,
-                  onPressed: _onGoogleTap,
                 ),
                 const SizedBox(height: 24),
                 Center(

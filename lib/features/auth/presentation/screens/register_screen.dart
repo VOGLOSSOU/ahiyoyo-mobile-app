@@ -88,6 +88,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return _isCheckingReferral || _referralParrainName == null;
   }
 
+  void _onGoogleTap() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Inscription Google bientôt disponible')),
+    );
+  }
+
   Future<void> _openLegalLink(String url) async {
     final uri = Uri.parse(url);
     await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -162,6 +168,23 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   style: AppTypography.bodySecondary,
                 ),
                 const SizedBox(height: 24),
+                AhiyoyoButton(
+                  text: 'Continuer avec Google',
+                  variant: AhiyoyoButtonVariant.secondary,
+                  onPressed: _onGoogleTap,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const Expanded(child: Divider(color: AppColors.border)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text('ou par email', style: AppTypography.captionTertiary),
+                    ),
+                    const Expanded(child: Divider(color: AppColors.border)),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 if (_globalError != null) ...[
                   AhiyoyoErrorBanner(message: _globalError!),
                   const SizedBox(height: 16),
