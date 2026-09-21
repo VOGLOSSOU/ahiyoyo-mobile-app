@@ -1,7 +1,7 @@
 /// Points de terminaison (endpoints) de l'API Ahiyoyo.
 abstract class ApiEndpoints {
   /// Base URL par défaut (configurable par variable d'environnement ou override)
-  static const String defaultBaseUrl = 'https://api.ahiyoyo.com';
+  static const String defaultBaseUrl = 'https://orchid-jellyfish-551876.hostingersite.com';
 
   // --- Authentification & Utilisateur (contrat docs-from-api/01_AUTHENTIFICATION_FLUTTER.md) ---
   static const String register = '/api/register';
