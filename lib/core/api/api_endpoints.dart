@@ -44,8 +44,9 @@ abstract class ApiEndpoints {
   static const String airOffers = '/offers/air';
   static String airOfferDetail(String id) => '/offers/air/$id';
 
-  // --- Tarifs & Adresses ---
-  static const String tariffs = '/tariffs';
+  // --- Tarifs & Adresses (contrat docs-from-api/MOBILE_GUIDE_TARIFS_ADRESSES.md) ---
+  /// Route publique, sans authentification requise.
+  static const String tariffsPublic = '/api/tarifs/public';
 
   // --- Parrainage (tableau de bord "Gagner de l'argent", Lot 3) ---
   static const String referral = '/referral';

@@ -29,6 +29,7 @@ class AuthInterceptor extends Interceptor {
     ApiEndpoints.forgotPassword,
     ApiEndpoints.resetPassword,
     ApiEndpoints.track,
+    ApiEndpoints.tariffsPublic,
   ];
 
   bool _isPublicRoute(String path) {
