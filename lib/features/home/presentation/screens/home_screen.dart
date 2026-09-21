@@ -213,8 +213,6 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 10),
                   _NotificationPreviewTile(
                     icon: LucideIcons.package,
-                    iconColor: AppColors.statusSubmitted,
-                    iconBackground: AppColors.statusSubmittedBg,
                     title: 'Colis reçu à l\'entrepôt',
                     subtitle: 'Votre colis AHI-849204 a bien été réceptionné à Guangzhou.',
                     time: 'Il y a 2 heures',
@@ -222,8 +220,6 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 10),
                   _NotificationPreviewTile(
                     icon: LucideIcons.ship,
-                    iconColor: AppColors.primary,
-                    iconBackground: AppColors.primaryMuted,
                     title: 'Groupage maritime à 65%',
                     subtitle: 'Le conteneur Chine ➔ Cotonou se remplit vite, participez avant clôture.',
                     time: 'Il y a 5 heures',
@@ -305,16 +301,12 @@ class _StoryCircle extends StatelessWidget {
 /// "Notifications récentes" de la home.
 class _NotificationPreviewTile extends StatelessWidget {
   final IconData icon;
-  final Color iconColor;
-  final Color iconBackground;
   final String title;
   final String subtitle;
   final String time;
 
   const _NotificationPreviewTile({
     required this.icon,
-    required this.iconColor,
-    required this.iconBackground,
     required this.title,
     required this.subtitle,
     required this.time,
@@ -330,10 +322,10 @@ class _NotificationPreviewTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: iconBackground,
+              color: AppColors.primaryMuted,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: iconColor, size: 20),
+            child: Icon(icon, color: AppColors.primary, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(

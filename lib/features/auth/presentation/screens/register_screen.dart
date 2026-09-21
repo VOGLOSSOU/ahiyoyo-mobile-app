@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
@@ -94,11 +94,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
-  Future<void> _openLegalLink(String url) async {
-    final uri = Uri.parse(url);
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
-
   Future<void> _submit() async {
     if (_isLoading) return;
     if (!(_formKey.currentState?.validate() ?? false)) return;
@@ -149,7 +144,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(LucideIcons.chevron_left),
           onPressed: () => context.pop(),
         ),
       ),
@@ -315,14 +310,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                   text: 'CGU',
                                   style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => _openLegalLink('https://ahiyoyo.com/cgu'),
+                                    ..onTap = () => context.push(AppRoutes.cgu),
                                 ),
                                 const TextSpan(text: ' et la '),
                                 TextSpan(
                                   text: 'Politique de confidentialité',
                                   style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => _openLegalLink('https://ahiyoyo.com/confidentialite'),
+                                    ..onTap = () => context.push(AppRoutes.privacyPolicy),
                                 ),
                                 const TextSpan(text: '.'),
                               ],

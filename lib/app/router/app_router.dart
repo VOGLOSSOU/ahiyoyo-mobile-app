@@ -9,6 +9,9 @@ import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/groupage/presentation/screens/air_offer_detail_screen.dart';
 import '../../features/groupage/presentation/screens/sea_groupage_detail_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/legal/domain/cgu_content.dart';
+import '../../features/legal/domain/privacy_policy_content.dart';
+import '../../features/legal/presentation/screens/legal_document_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/orders/presentation/screens/orders_screen.dart';
 import '../../features/parcels/presentation/screens/parcels_screen.dart';
@@ -139,6 +142,18 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.changePassword,
       builder: (context, state) => const ChangePasswordScreen(),
+    ),
+
+    // --- Pages légales ---
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.cgu,
+      builder: (context, state) => LegalDocumentScreen(document: cguDocument),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.privacyPolicy,
+      builder: (context, state) => LegalDocumentScreen(document: privacyPolicyDocument),
     ),
   ],
 );

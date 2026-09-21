@@ -33,7 +33,7 @@ class _TariffsScreenState extends ConsumerState<TariffsScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(LucideIcons.arrow_left),
+          icon: const Icon(LucideIcons.chevron_left),
           onPressed: () => context.pop(),
         ),
         title: const Text('Adresses & Tarifs', style: AppTypography.titleMedium),
@@ -65,6 +65,26 @@ class _TariffsScreenState extends ConsumerState<TariffsScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                const Center(
+                  child: Text(
+                    'ROUTES PUBLIQUES AHIYOYO',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text('Nos adresses & tarifs d\'envoi', style: AppTypography.titleLarge),
+                const SizedBox(height: 8),
+                const Text(
+                  'Adresses de nos entrepôts, tarifs de transport et instructions d\'envoi pour chaque route disponible.',
+                  style: AppTypography.bodySecondary,
+                ),
+                const SizedBox(height: 24),
                 _FilterRow(
                   counts: counts,
                   selected: _filter,

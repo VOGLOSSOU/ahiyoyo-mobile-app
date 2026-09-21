@@ -19,7 +19,7 @@ class SeaGroupageDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(LucideIcons.arrow_left),
+          icon: const Icon(LucideIcons.chevron_left),
           onPressed: () => context.pop(),
         ),
         title: const Text('Groupage maritime', style: AppTypography.titleMedium),

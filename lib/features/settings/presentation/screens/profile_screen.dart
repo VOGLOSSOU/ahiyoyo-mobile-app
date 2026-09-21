@@ -167,7 +167,12 @@ class ProfileScreen extends ConsumerWidget {
           _SettingsTile(
             icon: LucideIcons.file_text,
             title: 'Conditions Générales d\'Utilisation',
-            onTap: () {},
+            onTap: () => context.push(AppRoutes.cgu),
+          ),
+          _SettingsTile(
+            icon: LucideIcons.lock,
+            title: 'Politique de confidentialité',
+            onTap: () => context.push(AppRoutes.privacyPolicy),
           ),
           const SizedBox(height: 24),
 

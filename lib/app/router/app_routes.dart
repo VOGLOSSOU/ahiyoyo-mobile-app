@@ -32,4 +32,8 @@ abstract class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String resetPassword = '/reset-password';
   static const String changePassword = '/change-password';
+
+  // --- Pages légales ---
+  static const String cgu = '/cgu';
+  static const String privacyPolicy = '/confidentialite';
 }
