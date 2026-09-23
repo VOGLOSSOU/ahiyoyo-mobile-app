@@ -72,14 +72,17 @@ class ErrorInterceptor extends Interceptor {
         message = rawMessage['message'] as String;
       }
 
-      // 3. Extraction des erreurs de champ. L'API Ahiyoyo retourne
-      // `errors: [{ msg, path }, ...]` (une LISTE, pas une map) — on la
-      // convertit en `{ path: msg }` pour un lookup direct côté formulaires.
+      // 3. Extraction des erreurs de champ. Les contrats API retournent
+      // `errors: [{ path, msg|message }, ...]` (une LISTE, pas une map) —
+      // la clé du texte varie selon l'endpoint (`msg` pour l'authentification,
+      // `message` pour l'enregistrement de colis) : on accepte les deux et on
+      // convertit en `{ path: texte }` pour un lookup direct côté formulaires.
       if (data['errors'] is List) {
         final fieldErrors = <String, dynamic>{};
         for (final entry in data['errors'] as List) {
-          if (entry is Map && entry['path'] is String && entry['msg'] is String) {
-            fieldErrors[entry['path'] as String] = entry['msg'] as String;
+          if (entry is Map && entry['path'] is String) {
+            final text = entry['msg'] ?? entry['message'];
+            if (text is String) fieldErrors[entry['path'] as String] = text;
           }
         }
         if (fieldErrors.isNotEmpty) details = fieldErrors;

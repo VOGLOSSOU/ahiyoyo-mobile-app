@@ -198,7 +198,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           icon: LucideIcons.package_plus,
                           title: 'Nouvelle expédition',
                           subtitle: 'Enregistrer vos colis prêts à être expédiés',
-                          onTap: () {},
+                          onTap: () => context.push(AppRoutes.newParcel),
                         ),
                       ),
                       const SizedBox(width: 12),

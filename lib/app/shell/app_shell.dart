@@ -68,7 +68,10 @@ class AppShell extends StatelessWidget {
               _QuickActionTile(
                 icon: LucideIcons.package_plus,
                 label: 'Enregistrer un colis',
-                onTap: () => Navigator.of(sheetContext).pop(),
+                onTap: () {
+                  Navigator.of(sheetContext).pop();
+                  context.push(AppRoutes.newParcel);
+                },
               ),
               const SizedBox(height: 8),
               _QuickActionTile(

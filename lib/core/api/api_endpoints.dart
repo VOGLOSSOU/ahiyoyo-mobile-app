@@ -20,9 +20,23 @@ abstract class ApiEndpoints {
   /// Route publique, sans authentification requise.
   static const String track = '/api/tracking';
 
-  // --- Colis & Expéditions ---
+  // --- Colis & Expéditions (contrat docs-from-api/03_ENREGISTREMENT_COLIS_MOBILE.md) ---
+  /// Route publique, sans authentification requise.
+  static const String colisRoutesDisponibles = '/api/colis/routes-disponibles';
+
+  /// Création d'un colis. Nécessite un Bearer client, format multipart.
+  static const String colis = '/api/colis';
+
+  // Liste/détail des colis d'un client : non couverts par le contrat actuel,
+  // chemins encore à confirmer avec l'équipe backend.
   static const String parcels = '/parcels';
   static String parcelDetail(String id) => '/parcels/$id';
+
+  /// Offres de groupage ouvertes, routes publiques.
+  static const String maritimeContainers = '/api/maritime/containers';
+  static String maritimeContainerDetail(String id) => '/api/maritime/containers/$id';
+  static const String airGroupageOffers = '/api/air-groupage/offers';
+  static String airGroupageOfferDetail(String id) => '/api/air-groupage/offers/$id';
 
   // --- Devis (Quotes) ---
   static const String quotes = '/quotes';

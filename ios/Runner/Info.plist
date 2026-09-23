@@ -59,7 +59,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -69,5 +68,9 @@
 		<string>mailto</string>
 		<string>whatsapp</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Ahiyoyo a besoin d'accéder à l'appareil photo pour prendre en photo vos articles ou vos preuves de paiement.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ahiyoyo a besoin d'accéder à vos photos pour joindre des images d'articles à vos colis.</string>
 </dict>
 </plist>

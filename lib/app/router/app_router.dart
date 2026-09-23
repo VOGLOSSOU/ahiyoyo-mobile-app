@@ -16,6 +16,7 @@ import '../../features/legal/domain/privacy_policy_content.dart';
 import '../../features/legal/presentation/screens/legal_document_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/orders/presentation/screens/orders_screen.dart';
+import '../../features/parcels/presentation/screens/new_parcel_screen.dart';
 import '../../features/parcels/presentation/screens/parcels_screen.dart';
 import '../../features/settings/presentation/screens/profile_screen.dart';
 import '../../features/tariffs/presentation/screens/tariffs_screen.dart';
@@ -101,6 +102,11 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.tariffs,
       builder: (context, state) => const TariffsScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.newParcel,
+      builder: (context, state) => const NewParcelScreen(),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,

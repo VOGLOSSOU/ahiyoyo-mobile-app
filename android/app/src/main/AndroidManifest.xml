@@ -32,6 +32,7 @@
             android:value="2" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <!-- Required for url_launcher on Android 11+ (package visibility) -->
     <queries>
