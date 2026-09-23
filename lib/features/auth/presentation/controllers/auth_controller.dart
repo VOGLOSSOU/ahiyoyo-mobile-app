@@ -82,6 +82,14 @@ class AuthController extends StateNotifier<AuthState> {
     return user;
   }
 
+  /// `PATCH /api/me/profile` retourne déjà le profil actualisé : inutile de
+  /// refaire un `GET /api/me` derrière.
+  Future<User> updateProfile({String? prenom, String? nom}) async {
+    final user = await _repository.updateProfile(prenom: prenom, nom: nom);
+    state = state.copyWith(user: user);
+    return user;
+  }
+
   Future<void> logout() async {
     await _secureStorage.clearSession();
     state = const AuthState(isInitializing: false, user: null);

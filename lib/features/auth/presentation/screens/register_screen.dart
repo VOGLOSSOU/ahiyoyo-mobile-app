@@ -9,6 +9,7 @@ import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_typography.dart';
 import '../../../../core/errors/app_exception.dart';
+import '../../../../core/utils/phone_validator.dart';
 import '../../../../core/widgets/ahiyoyo_button.dart';
 import '../../../../core/widgets/ahiyoyo_error_banner.dart';
 import '../controllers/auth_controller.dart';
@@ -33,6 +34,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _acceptedTerms = false;
+  bool _isPhoneValid = false;
   String? _globalError;
   Map<String, dynamic>? _fieldErrors;
 
@@ -86,6 +88,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final code = _referralController.text.trim();
     if (code.isEmpty) return false;
     return _isCheckingReferral || _referralParrainName == null;
+  }
+
+  void _revalidatePhone() {
+    final isValid = PhoneValidator.isValid(
+      codePays: _codePaysController.text,
+      numero: _numeroController.text,
+    );
+    if (isValid != _isPhoneValid) setState(() => _isPhoneValid = isValid);
   }
 
   void _onGoogleTap() {
@@ -243,6 +253,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         keyboardType: TextInputType.number,
                         hintText: '229',
                         errorText: _fieldErrors?['code_pays'] as String?,
+                        onChanged: (_) => _revalidatePhone(),
                         validator: (v) => (v == null || v.trim().isEmpty) ? 'Requis' : null,
                       ),
                     ),
@@ -254,10 +265,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         keyboardType: TextInputType.phone,
                         hintText: '97000000',
                         errorText: _fieldErrors?['numero'] as String?,
+                        onChanged: (_) => _revalidatePhone(),
                         validator: (v) {
-                          if (v == null || v.trim().isEmpty) return 'Requis';
-                          if (v.trim().length < 6) return 'Numéro invalide';
-                          return null;
+                          if (_codePaysController.text.trim().isEmpty) return null;
+                          return PhoneValidator.validate(
+                            codePays: _codePaysController.text,
+                            numero: v ?? '',
+                          );
                         },
                       ),
                     ),
@@ -332,7 +346,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 AhiyoyoButton(
                   text: 'Créer mon compte',
                   isLoading: _isLoading,
-                  onPressed: (_isLoading || !_acceptedTerms || _isReferralBlocking) ? null : _submit,
+                  onPressed: (_isLoading || !_acceptedTerms || !_isPhoneValid || _isReferralBlocking) ? null : _submit,
                 ),
                 const SizedBox(height: 20),
                 Center(

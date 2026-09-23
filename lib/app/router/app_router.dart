@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/auth/domain/user.dart';
 import '../../features/auth/presentation/screens/change_password_screen.dart';
+import '../../features/auth/presentation/screens/edit_profile_screen.dart';
 import '../../features/auth/presentation/screens/email_activation_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -142,6 +144,11 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.changePassword,
       builder: (context, state) => const ChangePasswordScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: AppRoutes.editProfile,
+      builder: (context, state) => EditProfileScreen(user: state.extra as User),
     ),
 
     // --- Pages légales ---

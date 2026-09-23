@@ -26,6 +26,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _obscurePassword = true;
   String? _globalError;
   bool _showActivationActions = false;
+  bool _isGoogleOnlyAccount = false;
   Map<String, dynamic>? _fieldErrors;
 
   @override
@@ -44,6 +45,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _globalError = null;
       _fieldErrors = null;
       _showActivationActions = false;
+      _isGoogleOnlyAccount = false;
     });
 
     try {
@@ -58,6 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         _fieldErrors = e.details;
         _globalError = e.details == null ? e.message : null;
         _showActivationActions = e.statusCode == 403;
+        _isGoogleOnlyAccount = e.code == 'GOOGLE_ONLY_ACCOUNT';
       });
     } catch (_) {
       setState(() => _globalError = 'Une erreur inattendue est survenue.');
@@ -108,11 +111,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   style: AppTypography.bodySecondary,
                 ),
                 const SizedBox(height: 24),
-                AhiyoyoButton(
-                  text: 'Continuer avec Google',
-                  variant: AhiyoyoButtonVariant.secondary,
-                  onPressed: _onGoogleTap,
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  padding: EdgeInsets.all(_isGoogleOnlyAccount ? 3 : 0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: _isGoogleOnlyAccount ? Border.all(color: AppColors.primary, width: 2) : null,
+                  ),
+                  child: AhiyoyoButton(
+                    text: 'Continuer avec Google',
+                    variant: AhiyoyoButtonVariant.secondary,
+                    onPressed: _onGoogleTap,
+                  ),
                 ),
+                if (_isGoogleOnlyAccount) ...[
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Ce compte a été créé avec Google : utilisez ce bouton pour vous connecter.',
+                    style: TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                ],
                 const SizedBox(height: 20),
                 Row(
                   children: [

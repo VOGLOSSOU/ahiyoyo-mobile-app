@@ -85,6 +85,10 @@ class ProfileScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
+                IconButton(
+                  icon: const Icon(LucideIcons.pencil, size: 18, color: AppColors.textSecondary),
+                  onPressed: () => context.push(AppRoutes.editProfile, extra: user),
+                ),
               ],
             ),
           ),
