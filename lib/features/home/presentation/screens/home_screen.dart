@@ -8,14 +8,34 @@ import '../../../../app/theme/app_typography.dart';
 import '../../../../core/widgets/ahiyoyo_card.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   // Placeholder en attendant le vrai flux de notifications (Lot 3).
   static const int _unreadNotificationsCount = 3;
 
+  final TextEditingController _trackingController = TextEditingController();
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _trackingController.dispose();
+    super.dispose();
+  }
+
+  void _searchTracking() {
+    final query = _trackingController.text.trim();
+    if (query.isEmpty) return;
+    FocusScope.of(context).unfocus();
+    context.push(AppRoutes.tracking, extra: query);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bool isAuthenticated = ref.watch(isAuthenticatedProvider);
 
     return Scaffold(
@@ -128,9 +148,12 @@ class HomeScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(12),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: TextField(
-                            decoration: InputDecoration(
+                            controller: _trackingController,
+                            textInputAction: TextInputAction.search,
+                            onSubmitted: (_) => _searchTracking(),
+                            decoration: const InputDecoration(
                               hintText: 'Entrez un N° de suivi (ex. AHI-123456)',
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -144,7 +167,7 @@ class HomeScreen extends ConsumerWidget {
                         SizedBox(
                           height: 42,
                           child: ElevatedButton(
-                            onPressed: () => context.push(AppRoutes.tracking),
+                            onPressed: _searchTracking,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               foregroundColor: AppColors.onPrimary,

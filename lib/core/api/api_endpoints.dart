@@ -16,8 +16,9 @@ abstract class ApiEndpoints {
   static const String updateProfile = '/api/me/profile';
   static const String changePassword = '/api/auth/change-password';
 
-  // --- Suivi Public & Tracking ---
-  static const String track = '/tracking';
+  // --- Suivi Public & Tracking (contrat docs-from-api/04_SUIVI_PUBLIC_COLIS_COMMANDES_MOBILE.md) ---
+  /// Route publique, sans authentification requise.
+  static const String track = '/api/tracking';
 
   // --- Colis & Expéditions ---
   static const String parcels = '/parcels';

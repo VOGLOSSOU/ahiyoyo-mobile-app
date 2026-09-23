@@ -80,7 +80,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: AppRoutes.tracking,
-      builder: (context, state) => const TrackingScreen(),
+      builder: (context, state) => TrackingScreen(initialQuery: state.extra as String?),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
